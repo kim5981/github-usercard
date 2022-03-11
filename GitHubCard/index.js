@@ -5,7 +5,7 @@ import axios from "axios";
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-
+const data = axios.get("https://api.github.com/users/kim5981")
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -51,6 +51,70 @@ const followersArray = [];
       </div>
     </div>
 */
+function cardCreator (userData) {
+  //wrapper div
+  const cardWrapper = document.createElement("div")
+  cardWrapper.classList.add("card")
+//pfp
+  const profilePic = document.createElement("img");
+  profilePic.src = userData.gravatar_id;
+//user info div
+  const userInfo = document.createElement("div");
+  userInfo.classList.add("card-info");
+//name
+  const name = document.createElement("h3");
+  name.classList.add("name");
+  name.textContent = userData.name;
+//username
+const username = document.createElement("p");
+username.classList.add("username");
+username.textContent = userData.login
+//location
+const location = document.createElement("p");
+location.textContent = userData.location;
+//profile link
+const profileWrap = document.createElement("p");
+profileWrap.textContent = `Profile: ${profileLink}` // <--------- may have to change... ? <.< 
+
+const profileLink = document.createElement("a");
+profileLink.href = userData.url //*   <-- may have to change to html_url 
+profileLink.textContent = userData.url
+//follow count
+const followerCount = document.createElement("p");
+followerCount.textContent = `Followers: ${userData.followers}`
+const followingCount = document.createElement("p");
+followingCount.textContent = `Following: ${userData.following}`
+//bio
+const bio = document.createElement("p");
+bio.textContent = `Bio: ${ userData.bio }`;
+
+//Appendages  ༽(  ⊙﹇⊙)༼  
+cardWrapper.appendChild(profilePic);
+cardWrapper.appendChild(userInfo);
+
+userInfo.appendChild(name);
+userInfo.appendChild(username);
+userInfo.appendChild(location);
+userInfo.appendChild(profileWrap);
+profileWrap.appendChild(profileLink);
+userInfo.appendChild(followerCount);
+userInfo.appendChild(followingCount);
+userInfo.appendChild(bio);
+
+
+
+
+
+console.log(profilePic);
+console.log(userData);
+
+return cardWrapper;
+
+}
+
+
+
+cardCreator(data);
 
 /*
   List of LS Instructors Github username's:
