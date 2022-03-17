@@ -1,11 +1,20 @@
 import axios from "axios";
 
+
+const cards = document.querySelector(".cards");
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-const data = axios.get("https://api.github.com/users/kim5981")
+
+    axios.get("https://api.github.com/users/kim5981")
+   .then(res => {
+    cards.appendChild(cardCreator(res.data))
+  })
+   .catch(error => console.error(error))
+
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -19,6 +28,9 @@ const data = axios.get("https://api.github.com/users/kim5981")
     and append the returned markup to the DOM as a child of .cards
 */
 
+
+
+
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
     follow this link in your browser https://api.github.com/users/<Your github name>/followers,
@@ -30,8 +42,25 @@ const data = axios.get("https://api.github.com/users/kim5981")
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  "justsml",
+  "crharding",
+  "brityhemming",
+  "keirankozlowski",
+  "melodylayne",
+ "tetondan",
+    "dustinmyers",
+    "bigknell"
+];
 
+
+followersArray.forEach(follower => {
+  axios.get(`https://api.github.com/users/${follower}`)
+  .then(res => {
+    cards.appendChild(cardCreator(res.data))
+  })
+   .catch(error => console.error(error))
+})
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
     Using DOM methods and properties, create and return the following markup:
@@ -51,42 +80,55 @@ const followersArray = [];
       </div>
     </div>
 */
+
+// {login, userPic, userName, userLocation, userLink, followers, following, userBio}
+
 function cardCreator (userData) {
+  
   //wrapper div
   const cardWrapper = document.createElement("div")
   cardWrapper.classList.add("card")
-//pfp
+
+  //pfp
   const profilePic = document.createElement("img");
-  profilePic.src = userData.gravatar_id;
-//user info div
+  profilePic.src = userData.avatar_url;
+  profilePic.alt = "a profile picture of the github user"
+
+  //user info div
   const userInfo = document.createElement("div");
   userInfo.classList.add("card-info");
-//name
+
+  //name
   const name = document.createElement("h3");
   name.classList.add("name");
   name.textContent = userData.name;
-//username
+
+  //username
 const username = document.createElement("p");
 username.classList.add("username");
-username.textContent = userData.login
+username.textContent = userData.login;
+
 //location
 const location = document.createElement("p");
 location.textContent = userData.location;
+
 //profile link
 const profileWrap = document.createElement("p");
-profileWrap.textContent = `Profile: ${profileLink}` // <--------- may have to change... ? <.< 
+profileWrap.textContent = "Profile: "
 
 const profileLink = document.createElement("a");
-profileLink.href = userData.url //*   <-- may have to change to html_url 
-profileLink.textContent = userData.url
+profileLink.href = userData.html_url //?  
+profileLink.textContent = "GitHub Link"
+
 //follow count
 const followerCount = document.createElement("p");
 followerCount.textContent = `Followers: ${userData.followers}`
 const followingCount = document.createElement("p");
 followingCount.textContent = `Following: ${userData.following}`
+
 //bio
 const bio = document.createElement("p");
-bio.textContent = `Bio: ${ userData.bio }`;
+bio.textContent = `Bio: ${userData.bio}`;
 
 //Appendages  ༽(  ⊙﹇⊙)༼  
 cardWrapper.appendChild(profilePic);
@@ -101,20 +143,11 @@ userInfo.appendChild(followerCount);
 userInfo.appendChild(followingCount);
 userInfo.appendChild(bio);
 
-
-
-
-
-console.log(profilePic);
-console.log(userData);
-
 return cardWrapper;
 
 }
 
 
-
-cardCreator(data);
 
 /*
   List of LS Instructors Github username's:
@@ -125,11 +158,3 @@ cardCreator(data);
     bigknell
 */
 
-/**
- * SPRINT NOTES
- * 
- * DOM manipulation
- * look at today's ---> guided project <---- , module project
- * coding in separate component files 
- * no api stuff on sprint thankfully lol
- */
